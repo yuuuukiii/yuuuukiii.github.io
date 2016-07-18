@@ -1,0 +1,122 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><meta name="author" content="Yuki"><link rel="icon" href="/hexo.png"><title>YukiBlog</title><meta name="description" content="remember something"><link rel="alternate" type="application/rss+xml" title="YukiBlog" href="/atom.xml"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+</head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class="container-fluid"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#main-navbar" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/" class="navbar-brand">YukiBlog</a></div><div id="main-navbar" class="collapse navbar-collapse"><ul class="nav navbar-nav navbar-right"><li><a href="/archives">Archive</a></li><li><a href="https://github.com/twoyao/beautiful-hexo">Github</a></li><li><a href="/about/">About</a></li></ul></div><div class="avatar-container"><div class="avatar-img-border"><a href="/"><img src="/hexo.png" class="avatar-img"></a></div></div></div></nav><header class="header-section"><div class="intro-header no-img"><div class="container"><div class="row"><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><div class="post-heading"><h1>GDB常用指令</h1><p class="post-meta">Posted on Jul 18 2016</p></div></div></div></div></div></header><div class="container"><div class="row"><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role="main" class="blog-post"><h1 id="GDB常用指令"><a href="#GDB常用指令" class="headerlink" title="GDB常用指令"></a>GDB常用指令</h1><p>[TOC]</p>
+<p>注意编译时加-g选项，生成信息用于调试</p>
+<p>调试时利用-tui选项，会生成文本用户界面显示代码，比较方便</p>
+<h2 id="设置断点"><a href="#设置断点" class="headerlink" title="设置断点"></a>设置断点</h2><ul>
+<li><p>break line_number，缩写为b line_number</p>
+<p>//当提示没有符号表被读取时 [没有加-g标记] ，可用b 源代码文件名：行号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) b 15</div><div class="line">(gdb) b file.cpp:15</div></pre></td></tr></table></figure>
+</li>
+<li><p>b line_number If condition</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) b 15 if i&gt;99</div></pre></td></tr></table></figure>
+</li>
+<li><p>b func</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) b main</div></pre></td></tr></table></figure>
+</li>
+<li><p>b *address </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) b *0x8048452</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="删除断点"><a href="#删除断点" class="headerlink" title="删除断点"></a>删除断点</h2><ul>
+<li><p>delete line_number，缩写为d line_number</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) d 15</div></pre></td></tr></table></figure>
+</li>
+<li><p>delete，缩写为d</p>
+<p>//删除所有已经设置的断点，在删除前会显示信息确认是否删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) d</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><ul>
+<li><p>run，缩写r</p>
+<p>//开始执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) r</div></pre></td></tr></table></figure>
+</li>
+<li><p>continue，缩写c</p>
+<p>//离开断点，继续执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) c</div></pre></td></tr></table></figure>
+</li>
+<li><p>next，缩写n</p>
+<p>//执行下一条语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) n</div></pre></td></tr></table></figure>
+</li>
+<li><p>step，缩写s</p>
+<p>//执行下一条语句或者进入函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) c</div></pre></td></tr></table></figure>
+</li>
+<li><p>until，缩写n</p>
+<p>//在循环中时，该指令执行到循环结束后的第一行语句后停止</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) u</div></pre></td></tr></table></figure>
+</li>
+<li><p>finish</p>
+<p>//继续执行直到函数返回</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) finish</div></pre></td></tr></table></figure>
+</li>
+<li><p>quit，缩写q</p>
+<p>//离开gdb调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) q</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h2><ul>
+<li><p>info break，缩写info b</p>
+<p>//显示断点信息，在哪些地方设置了断点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) info b</div></pre></td></tr></table></figure>
+</li>
+<li><p>info locals</p>
+<p>//显示局部变量及其值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) info locals</div></pre></td></tr></table></figure>
+</li>
+<li><p>watch varname</p>
+<p>//变量的值发生变化时程序会停止运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) watch year</div></pre></td></tr></table></figure>
+</li>
+<li><p>print varname，缩写 p</p>
+<p>//显示变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) p year</div></pre></td></tr></table></figure>
+</li>
+<li><p>ptype varname</p>
+<p>//显示变量类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) ptype year</div></pre></td></tr></table></figure>
+</li>
+<li><p>print sizeof（varname）</p>
+<p>//显示变量size</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) print sizeof(year)</div></pre></td></tr></table></figure>
+</li>
+<li><p>set var varname = new value</p>
+<p>//修改变量的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) set var year = 2016</div></pre></td></tr></table></figure>
+</li>
+<li><p>print （varname = new value）</p>
+<p>//修改变量的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) print (year = 2018)</div></pre></td></tr></table></figure>
+</li>
+<li><p>display varname</p>
+<p>//在每个断点或者每执行一步时都打印该值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) display year</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h2><ul>
+<li><p>backtrack，缩写bt</p>
+<p>//显示运行到此句的函数堆栈情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) bt</div></pre></td></tr></table></figure>
+</li>
+<li><p>disassemble  main</p>
+<p>//显示反汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) disassemble main</div></pre></td></tr></table></figure>
+</li>
+<li><p>layout asm</p>
+<p>//显示反汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) layout asm</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2></article><ul class="pager blog-pager"><li class="next"><a href="/2016/07/17/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello World">Next Post →</a></li></ul><div class="disqus-comments"><div class="comments"><div id="disqus_thread"></div></div></div><script>var url_parts = window.location.href.split("?");
+var disqus_url = url_parts[0];
+(function () {
+    console.log("enter disqus");
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = "//twoyao.disqus.com/embed.js";
+    (document.head || d.body ).appendChild(dsq);
+})();</script></div></div></div><footer><div class="container beautiful-jekyll-footer"><div class="row"><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href="https://github.com/yuuuukiii" title="GitHub"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-stack-1x fa-inverse fa-github"></i></span></a></li><li><a href="mailto:zhaoyuying0@outlook.com" title="Email me"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-stack-1x fa-inverse fa-envelope"></i></span></a></li></ul><p class="copyright text-muted">© Yuki • 2016 • <a href="mailto:undefined"></a>
+</p><p class="theme-by text-muted">Theme by
+<a href="https://github.com/twoyao/beautiful-hexo">beautiful-hexo</a></p></div></div></div></footer><script src="/js/jquery-1.11.2.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/main.js"></script></body></html>
