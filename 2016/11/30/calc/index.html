@@ -1,0 +1,96 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="remember something"><title>Cold Temperature Altitude Correction | YukiBlog</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">YukiBlog</a><span class="subtitle">Simple Is Beautiful</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">Home</a><a href="/archives" class="sidebar-nav-item">Archives</a><a href="/friend" class="sidebar-nav-item">Friends</a><a href="/about" class="sidebar-nav-item">About</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>Cold Temperature Altitude Correction</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2016-11-30</div><div class="post-tags"><a class="post-tag-link" href="/tags/other/">other</a></div></div></div><article><div class="container post"><!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Calculator</title>
+	</head>
+	<body>
+		Temperature:
+		<input type="text" id="Temperature">
+		<br>
+		Elevation:
+		<input type="text" id="Elevation">
+		<br>
+		Altitude:
+		<input type="text" id="Altitude">
+		<br>
+		<br>
+		<button onclick="calc()">Calculate</button>
+		<br>
+		<br>
+		<p id="result"></p>
+	</body>
+	<script>
+	var temp = [ 0.0, -10.0, -20.0, -30.0, -40.0, -50.0 ];
+	var height = [ 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1500.0, 2000.0, 3000.0, 4000.0, 5000.0 ];
+	var table = [
+		[ 20.0, 20.0, 30.0, 30.0, 40.0, 40.0, 50.0, 50.0, 60.0, 90.0, 120.0, 170.0, 230.0, 290.0 ],
+		[ 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 150.0, 200.0, 290.0, 390.0, 490.0 ],
+		[ 30.0, 50.0, 60.0, 70.0, 90.0, 100.0, 120.0, 130.0, 140.0, 210.0, 280.0, 430.0, 570.0, 710.0 ],
+		[ 40.0, 60.0, 80.0, 100.0, 120.0, 130.0, 150.0, 170.0, 190.0, 280.0, 380.0, 570.0, 760.0, 950.0 ],
+		[ 50.0, 80.0, 100.0, 120.0, 150.0, 170.0, 190.0, 220.0, 240.0, 360.0, 480.0, 720.0, 970.0, 1210.0 ],
+		[ 60.0, 90.0, 120.0, 150.0, 180.0, 210.0, 240.0, 270.0, 300.0, 450.0, 600.0, 890.0, 1190.0, 1500.0 ]
+	];
+	function locate_t(t)
+	{
+		var x = 0;
+		if (t == -50.0)
+			return  5;
+		for (; x<5; x++)
+		{
+			if (t <= temp[x] && t>temp[x + 1])
+			return x;
+		}	
+		return -1;
+	}
+	function locate_h(h)
+	{
+		var y = 0;
+		if (h == 5000.0)
+			return 13;
+		for (; y<13; y++)
+		{
+			if (h >= height[y] && h<height[y + 1])
+			return y;
+		}
+		return -1;
+	}
+	function calc(){
+		var value1=document.getElementById('Temperature').value;
+		var value2=document.getElementById('Elevation').value;
+		var value3=document.getElementById('Altitude').value;
+		var t=parseFloat(value1);
+		var n=parseFloat(value2);
+		var m=parseFloat(value3);
+		var h = m - n;
+		var i = locate_t(t);
+		var j = locate_h(h);
+		var low, high, z;
+		if (i == 5.0 && j == 13.0)
+		{
+			z = 1500;
+		}
+		else
+		{
+			low = (t == temp[i]) ? table[i][j] : table[i][j] + (table[i + 1][j] - table[i][j])*t /(temp[i + 1] - temp[i]);
+			high = (t == temp[i]) ? table[i][j + 1] : table[i][j + 1] + (table[i + 1][j + 1] - table[i][j + 1])*t / (temp[i + 1] - temp[i]);
+			z = (h - height[j]) / ((height[j + 1] - height[j]) / (high - low)) + low;
+		}
+		var indicated_Altitude = m+z;
+		document.getElementById("result").innerHTML= "Calculated error is " + z + ", Indicated Altitude is " + indicated_Altitude;
+	}
+</script>
+</html>
+</div><!-- comment system--><div class="container"><hr><div data-thread-key="2016/11/30/calc/" data-title="Cold Temperature Altitude Correction" data-url="http://yuuuukiii.github.io/2016/11/30/calc/" class="ds-thread"></div><script>var duoshuoQuery = {short_name:'yuuuukiii'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:zhaoyuying0@outlook.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/https://github.com/yuuuukiii" target="_blank"><i class="fa fa-github"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">YukiBlog</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});
+</script></body></html>
